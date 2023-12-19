@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop</title>
+
+    <!-- BOX ICON -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div class="container d-flex flex-column align-items-center">
+        <h1 class="my-5">Schedule Maker</h1>
+
+        <!-- Drag and Drop Section -->
+        <div class="border rounded-4 col-lg-6 p-3">
+            <!-- start time -->
+            <div class="text-center">
+                <label for="start_duration" class="col-form-label">Start Duration</label>
+                <input type="time" class="form-control rounded-5" id="start_duration" value="05:00"
+                    onchange="update()" />
+            </div>
+
+            <!-- items that can be sortable -->
+            <div class="my-3" id="drop-items">
+                <div class="activity__entity row g-0 my-2">
+                    <div class="activity__time col-3 p-2">
+                        05:00 - 06:00
+                    </div>
+
+                    <div class="activity__card col-9 shadow border rounded-4">
+                        <div class="handle row g-0 px-3 py-2">
+                            <div class="col-8 d-flex flex-column d-flex justify-content-center">
+                                <span class="activity__name">Task 1</span>
+                                <span class="activity__duration text-secondary">60 minutes</span>
+                            </div>
+
+                            <div class="col-4 d-flex align-items-center justify-content-end">
+                                <button class="btn btn-warning mx-1 edit" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse-0" onclick="openEdit()"><i class='bx bx-pencil'></i></a>
+                                <button class="btn btn-danger mx-1 delete"><i class='bx bx-trash'></i></a>
+                            </div>
+                        </div>
+                        <div class="collapse px-3 pt-2 pb-3 border-top" id="collapse-0">
+                            <!-- name -->
+                            <div>
+                                <label class="col-form-label pt-0">Activity Name</label>
+                                <input type="text" class="form-control edit-name rounded-5" value="Task 1" onchange="editEvent(0)">
+                            </div>
+
+                            <!-- duration -->
+                            <div>
+                                <label class="col-form-label">Duration</label>
+                                <input type="time" class="form-control edit-duration rounded-5" value="01:00" onchange="editEvent(0)"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- add button -->
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-primary mx-3 rounded-5" onclick="addEvent()"><i
+                        class='bx bx-plus-medical'></i></button>
+                <button class="btn btn-warning mx-3 rounded-5" data-bs-toggle="modal" data-bs-target="#summaryModal"><i
+                        class='bx bx-file'></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- summary modal -->
+    <div class="modal fade" id="summaryModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="summaryModalTitle">Summary</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- text area -->
+                    <div class="mb-3">
+                        <textarea class="form-control" id="summary_text" rows="3" style="height: 20rem;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="copyClipboard()" id="toastClipboardBtn">Copy
+                        to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastClipboard" class="toast" role="alert">
+            <div class="toast-header bg-success-subtle">
+                <strong class="me-auto">Copy Success</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Schedule summary has been copied to clipboard!
+            </div>
+        </div>
+    </div>
+
+    <!-- ASSETS -->
+    <!-- Sortable List -->
+    <script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+
+    <!-- JS -->
+    <script src="assets/js/main.js"></script>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
