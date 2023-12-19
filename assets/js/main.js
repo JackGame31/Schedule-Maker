@@ -198,14 +198,18 @@ function editEvent(id) {
     .querySelector(`[data-index="${id}"]`)
     .querySelector(".activity__card");
   const name = card.querySelector(".edit-name").value;
-  const duration = card.querySelector(".edit-duration").value;
-  console.log(name, duration);
+  var duration = card.querySelector(".edit-duration").value;
+  if (duration < 0) 
+  {
+    card.querySelector(".edit-duration").value = 0;
+    duration = 0;
+  }
 
   // update the value
   const item = document.querySelector(`[data-index="${id}"]`);
   item.querySelector(".activity__name").textContent = name;
   item.querySelector(".activity__duration").textContent =
-    convertToMinuteFormat(duration) + " minutes";
+    duration + " minutes";
 
   update();
 }
