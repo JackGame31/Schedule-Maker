@@ -28,7 +28,7 @@
     opacity: 0;
 }
 
-.selected .activity__card {
+.selected .activity__card, .sortable-chosen .activity__card {
     border-color: var(--bs-primary) !important;
     background-color: var(--bs-primary-bg-subtle) !important;
 }

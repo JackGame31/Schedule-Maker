@@ -73,6 +73,7 @@ new Sortable.create(dropItems, {
   multiDrag: true,
   fallbackTolerance: 3,
   handle: ".handle",
+  delay: 300,
 
   // if data changed
   onEnd: function (evt) {
