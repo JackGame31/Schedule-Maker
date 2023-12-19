@@ -42,6 +42,21 @@ window.onload = function () {
       toastBootstrap.show();
     });
   }
+
+  // for dissmiss edit mode
+  window.addEventListener("click", function (e) {
+    var collapse = $(".show");
+
+    // if click outside collapse
+    if (!collapse.is(e.target) && collapse.has(e.target).length === 0) {
+      // dismiss all collapse
+      if (collapse.length > 0) {
+        collapse.collapse("hide");
+        // delete all selected class
+        var selected = document.querySelectorAll(".selected");
+      }
+    }
+  });
 };
 
 // DRAG AND DROP
@@ -97,7 +112,7 @@ function addEvent() {
       <!-- duration -->
       <div>
         <label class="col-form-label">Duration</label>
-        <input type="time" class="form-control edit-duration rounded-5" value="01:00" onchange="editEvent(0)"/>
+        <input type="number" class="form-control edit-duration rounded-5" value="60" onchange="editEvent(0)"/>
       </div>
     </div>
     `;
@@ -135,7 +150,7 @@ function update() {
     // change all attributes that connected with id
     var collapse = item.querySelector(".collapse");
     collapse.setAttribute("id", "collapse-" + index);
-    
+
     // input update
     var name = item.querySelector(".edit-name");
     var duration = item.querySelector(".edit-duration");
@@ -166,24 +181,6 @@ function deleteActivity(id) {
 // when there is class edit mode, then css selected not show
 var isEdit = -1;
 function openEdit() {
-  // check if collapse show does exist
-  var collapse = document.querySelectorAll(".show");
-  console.log(collapse);
-  if (collapse.length == 0) {
-    isEdit *= -1;
-  }
-
-  var activities = document.querySelectorAll(".activity__entity");
-  if (isEdit == 1) {
-    activities.forEach((item) => {
-      item.classList.add("edit-mode");
-    });
-  } else {
-    activities.forEach((item) => {
-      item.classList.remove("edit-mode");
-    });
-  }
-
   // remove all selected class
   var selected = document.querySelectorAll(".selected");
   selected.forEach((item) => {
@@ -199,8 +196,7 @@ function editEvent(id) {
     .querySelector(".activity__card");
   const name = card.querySelector(".edit-name").value;
   var duration = card.querySelector(".edit-duration").value;
-  if (duration < 0) 
-  {
+  if (duration < 0) {
     card.querySelector(".edit-duration").value = 0;
     duration = 0;
   }
@@ -208,8 +204,7 @@ function editEvent(id) {
   // update the value
   const item = document.querySelector(`[data-index="${id}"]`);
   item.querySelector(".activity__name").textContent = name;
-  item.querySelector(".activity__duration").textContent =
-    duration + " minutes";
+  item.querySelector(".activity__duration").textContent = duration + " minutes";
 
   update();
 }
