@@ -73,7 +73,7 @@ new Sortable.create(dropItems, {
   multiDrag: true,
   fallbackTolerance: 3,
   handle: ".handle",
-  delay: 300,
+  delay: 100,
 
   // if data changed
   onEnd: function (evt) {
@@ -86,43 +86,46 @@ function addEvent() {
   var list = document.getElementById("drop-items");
   var item = document.createElement("div");
   item.className = "activity__entity row g-0 my-2";
-  item.innerHTML = `
-  <div class="activity__time col-3 p-2">
-    05:00 - 06:00
-  </div>
+  item.innerHTML = 
+  `
+    <div class="activity__time col-3 p-2">
+      05:00 - 06:00
+    </div>
 
-  <div class="activity__card col-9 shadow border rounded-4">
-    <div class="handle row g-0 px-3 py-2">
-      <div class="col-8 d-flex flex-column d-flex justify-content-center">
-        <span class="activity__name">New Task</span>
-        <span class="activity__duration text-secondary">60 minutes</span>
+    <div class="activity__card col-9 shadow border rounded-4">
+      <div class="handle row px-3 py-2">
+        <div class="col-8 d-flex flex-column d-flex justify-content-center">
+          <span class="activity__name">New Task</span>
+          <span class="activity__duration text-secondary">60 minutes</span>
+        </div>
+
+        <div class="col-4 d-flex align-items-center justify-content-end">
+          <button class="btn btn-warning mx-1 rounded-5 edit" data-bs-toggle="collapse"
+            data-bs-target="#collapse-0" onclick="openEdit(0)"><i class='bx bx-pencil'></i></button>
+          <button class="btn btn-danger mx-1 rounded-5 delete"><i class='bx bx-trash'></i></button>
+        </div>  
       </div>
 
-      <div class="col-4 d-flex align-items-center justify-content-end">
-        <button class="btn btn-warning mx-1 edit" data-bs-toggle="collapse" data-bs-target="#collapse-0" onclick="openEdit()"><i class='bx bx-pencil'></i></a>
-        <button class="btn btn-danger mx-1 delete"><i class='bx bx-trash'></i></a>
+      <div class="collapse border-top" id="collapse-0">
+        <!-- name -->
+        <div class="px-3 pt-2">
+          <label class="col-form-label pt-0">Activity Name</label>
+          <input type="text" class="form-control edit-name rounded-5" value="New Task" onchange="editEvent(0)">
+        </div>
+
+        <!-- duration -->
+        <div class="px-3 pb-3">
+          <label class="col-form-label">Duration (minutes)</label>
+          <input type="number" class="form-control edit-duration rounded-5" value="60" min="0" onchange="editEvent(0)"/>
+        </div>
       </div>
     </div>
-    <div class="collapse px-3 pt-2 pb-3 border-top" id="collapse-0">
-      <!-- name -->
-      <div>
-        <label class="col-form-label pt-0">Activity Name</label>
-        <input type="text" class="form-control edit-name rounded-5" value="New Task" onchange="editEvent(0)">
-      </div>
-
-      <!-- duration -->
-      <div>
-        <label class="col-form-label">Duration</label>
-        <input type="number" class="form-control edit-duration rounded-5" value="60" onchange="editEvent(0)"/>
-      </div>
-    </div>
-    `;
+  `;
   list.appendChild(item);
   update();
 
   // get latest event and click show bs modal
   const editBtn = item.querySelector(".edit");
-  console.log(editBtn);
   editBtn.click();
 }
 
@@ -147,6 +150,7 @@ function update() {
     var editBtn = item.querySelector(".edit");
     deleteBtn.setAttribute("onclick", "deleteActivity(" + index + ")");
     editBtn.setAttribute("data-bs-target", "#collapse-" + index);
+    editBtn.setAttribute("onclick", "openEdit(" + index + ")")
 
     // change all attributes that connected with id
     var collapse = item.querySelector(".collapse");
@@ -180,13 +184,18 @@ function deleteActivity(id) {
 
 // add attribute class edit mode
 // when there is class edit mode, then css selected not show
-var isEdit = -1;
-function openEdit() {
+function openEdit(id) {
   // remove all selected class
   var selected = document.querySelectorAll(".selected");
   selected.forEach((item) => {
     item.classList.remove("selected");
   });
+
+  // auto focus show input
+  var input = document.querySelector('#collapse-' + id + ' .edit-name');
+  var len = input.value.length;
+  input.focus();
+  input.setSelectionRange(len, len)
 }
 
 // edit an activity

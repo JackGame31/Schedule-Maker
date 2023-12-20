@@ -19,6 +19,15 @@
     justify-content: center;
 }
 
+.handle {
+    transition: border-bottom 0.2s ease-in-out;
+}
+
+.edit, .delete {
+    padding-inline: 5px;
+    padding-block: 1px;
+}
+
 /* CHOSEN ITEM */
 .sortable-chosen {
     opacity: 1;
