@@ -195,7 +195,7 @@ function openEdit(id) {
   var input = document.querySelector('#collapse-' + id + ' .edit-name');
   var len = input.value.length;
   input.focus();
-  input.setSelectionRange(len, len)
+  input.select();
 }
 
 // edit an activity
