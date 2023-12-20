@@ -1,4 +1,6 @@
-// for index id
+// GENERAL
+AOS.init();
+
 window.onload = function () {
   // update index id of items to the latest
   update();
@@ -86,8 +88,8 @@ function addEvent() {
   var list = document.getElementById("drop-items");
   var item = document.createElement("div");
   item.className = "activity__entity row g-0 my-2";
-  item.innerHTML = 
-  `
+  item.setAttribute("data-aos", "fade-up");
+  item.innerHTML = `
     <div class="activity__time col-3 p-2">
       05:00 - 06:00
     </div>
@@ -150,7 +152,7 @@ function update() {
     var editBtn = item.querySelector(".edit");
     deleteBtn.setAttribute("onclick", "deleteActivity(" + index + ")");
     editBtn.setAttribute("data-bs-target", "#collapse-" + index);
-    editBtn.setAttribute("onclick", "openEdit(" + index + ")")
+    editBtn.setAttribute("onclick", "openEdit(" + index + ")");
 
     // change all attributes that connected with id
     var collapse = item.querySelector(".collapse");
@@ -173,13 +175,16 @@ function update() {
 // delete an activity
 function deleteActivity(id) {
   var item = document.querySelector(`[data-index="${id}"]`);
-  item.remove();
-  update();
-
-  if (document.getElementById("drop-items").childElementCount == 0) {
-    document.getElementById("drop-items").innerHTML =
-      '<div class="activity__empty text-center text-secondary px-3 py-2 border border-secondary rounded-4" style="border-style: dashed !important;">No schedule created</div>';
-  }
+  item.style.opacity = '0';
+  setTimeout(() => {
+    item.remove();
+    update();
+    if (document.getElementById("drop-items").childElementCount == 0) {
+      document.getElementById("drop-items").innerHTML =
+        '<div class="activity__empty text-center text-secondary px-3 py-2 border border-secondary rounded-4" style="border-style: dashed !important;">No schedule created</div>';
+      setTimeout(() => {document.querySelector(".activity__empty").style.opacity = 1;}, 100);
+    }
+  }, 500);
 }
 
 // add attribute class edit mode
@@ -192,7 +197,7 @@ function openEdit(id) {
   });
 
   // auto focus show input
-  var input = document.querySelector('#collapse-' + id + ' .edit-name');
+  var input = document.querySelector("#collapse-" + id + " .edit-name");
   var len = input.value.length;
   input.focus();
   input.select();

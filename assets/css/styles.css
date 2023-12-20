@@ -28,6 +28,18 @@
     padding-block: 1px;
 }
 
+.activity__entity {
+    opacity: 1;
+    -webkit-transition: opacity 500ms linear;
+    transition: opacity 500ms linear;
+}
+
+.activity__empty {
+    opacity: 0;
+    -webkit-transition: opacity 500ms linear;
+    transition: opacity 500ms linear;
+}
+
 /* CHOSEN ITEM */
 .sortable-chosen {
     opacity: 1;
