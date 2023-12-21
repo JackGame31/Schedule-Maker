@@ -186,9 +186,8 @@ function deleteActivity(id) {
     if (document.getElementById("drop-items").childElementCount == 0) {
       document.getElementById("drop-items").innerHTML =
         '<div class="activity__empty text-center text-secondary px-3 py-2 border border-secondary rounded-4" style="border-style: dashed !important;">No schedule created</div>';
-      setTimeout(() => {document.querySelector(".activity__empty").style.opacity = 1;}, 100);
     }
-  }, 200);
+  }, 500);
 }
 
 // add attribute class edit mode
