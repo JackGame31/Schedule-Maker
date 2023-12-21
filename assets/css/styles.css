@@ -66,13 +66,8 @@
 }
 
 /* CARD */
-
 .activity__card {
     transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-}
-
-.activity__card .collapse {
-    transition: border-color 0.2s ease-in-out;
 }
 
 .activity__time {
@@ -95,7 +90,7 @@
     opacity: 0;
 }
 
-.selected .activity__card, .sortable-chosen .activity__card {
+.selected:not([delete]) .activity__card, .sortable-chosen .activity__card {
     border-color: var(--bs-primary) !important;
     background-color: var(--bs-primary-bg-subtle) !important;
 }
