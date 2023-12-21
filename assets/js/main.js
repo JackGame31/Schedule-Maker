@@ -1,5 +1,5 @@
 // GENERAL
-AOS.init();
+// AOS.init();
 
 window.onload = function () {
   // update index id of items to the latest
@@ -88,7 +88,7 @@ function addEvent() {
   var list = document.getElementById("drop-items");
   var item = document.createElement("div");
   item.className = "activity__entity row g-0 my-2";
-  item.setAttribute("data-aos", "fade-up");
+  item.setAttribute("add", "");
   item.innerHTML = `
     <div class="activity__time col-3 p-2">
       05:00 - 06:00
@@ -125,6 +125,10 @@ function addEvent() {
   `;
   list.appendChild(item);
   update();
+
+  setTimeout(() => {
+    item.removeAttribute("add");
+  }, 500);
 
   // get latest event and click show bs modal
   const editBtn = item.querySelector(".edit");
@@ -175,7 +179,7 @@ function update() {
 // delete an activity
 function deleteActivity(id) {
   var item = document.querySelector(`[data-index="${id}"]`);
-  item.style.opacity = '0';
+  item.setAttribute("delete", "");
   setTimeout(() => {
     item.remove();
     update();
@@ -184,7 +188,7 @@ function deleteActivity(id) {
         '<div class="activity__empty text-center text-secondary px-3 py-2 border border-secondary rounded-4" style="border-style: dashed !important;">No schedule created</div>';
       setTimeout(() => {document.querySelector(".activity__empty").style.opacity = 1;}, 100);
     }
-  }, 500);
+  }, 200);
 }
 
 // add attribute class edit mode

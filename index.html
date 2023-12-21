@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule Maker</title>
 
-    <!-- AOS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
     <!-- BOX ICON -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
@@ -22,10 +19,10 @@
 
 <body>
     <div class="container d-flex flex-column align-items-center">
-        <h1 class="my-5" data-aos="fade-up">Schedule Maker</h1>
+        <h1 class="my-5" id="title">Schedule Maker</h1>
 
         <!-- Drag and Drop Section -->
-        <div class="border rounded-4 col-lg-6 p-3" data-aos="fade-up">
+        <div class="border rounded-4 col-lg-6 p-3 mb-5" id="container">
             <!-- start time -->
             <div class="text-center">
                 <label for="start_duration" class="col-form-label">Start Duration</label>
@@ -35,7 +32,7 @@
 
             <!-- items that can be sortable -->
             <div class="my-3" id="drop-items">
-                <div class="activity__entity row g-0 my-2" data-aos="fade-up">
+                <div class="activity__entity row g-0 my-2">
                     <div class="activity__time col-3 p-2">
                         05:00 - 06:00
                     </div>
@@ -120,9 +117,6 @@
     <!-- ASSETS -->
     <!-- Sortable List -->
     <script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
-
-    <!-- AOS -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <!-- JS -->
     <script src="assets/js/main.js"></script>

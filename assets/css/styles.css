@@ -4,7 +4,69 @@
     box-shadow: 4px 4px 16px #E1E1E1, -2px -2px 16px #FFF;
 }
 
+/* ANIMATION */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateY(25%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-out {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(25%);
+    }
+}
+
+#title {
+    animation: fade-in 0.4s ease-in-out, slide-in 0.4s ease-in-out;
+}
+
+#container {
+    animation: fade-in 0.6s ease-in-out, slide-in 0.6s ease-in-out;
+}
+
+#drop-items {
+    animation: fade-in 1s ease-in-out, slide-in 1s ease-in-out;
+}
+
+.activity__entity[add] {
+    animation: fade-in 0.5s ease-in-out, slide-in 0.5s ease-in-out;
+}
+
+.activity__entity[delete] {
+    animation: fade-out 0.2s ease-in-out, slide-out 0.2s ease-in-out;
+}
+
+.activity__empty {
+    animation: fade-in 0.5s ease-in-out, slide-in 0.5s ease-in-out;
+}
+
 /* CARD */
+
 .activity__card {
     transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
@@ -19,28 +81,12 @@
     justify-content: center;
 }
 
-.handle {
-    transition: border-bottom 0.2s ease-in-out;
-}
-
 .edit, .delete {
     padding-inline: 5px;
     padding-block: 1px;
 }
 
-.activity__entity {
-    opacity: 1;
-    -webkit-transition: opacity 500ms linear;
-    transition: opacity 500ms linear;
-}
-
-.activity__empty {
-    opacity: 0;
-    -webkit-transition: opacity 500ms linear;
-    transition: opacity 500ms linear;
-}
-
-/* CHOSEN ITEM */
+/* SORTABLE LIST */
 .sortable-chosen {
     opacity: 1;
 }
