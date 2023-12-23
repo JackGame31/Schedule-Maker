@@ -1,7 +1,9 @@
 // GENERAL
-// AOS.init();
-
 window.onload = function () {
+  updateActiveActivity();
+  // Call the updateActiveActivity function periodically (e.g., every minute)
+  setInterval(updateActiveActivity, 1000); // Update every minute
+
   // update index id of items to the latest
   update();
 
@@ -266,4 +268,78 @@ function copyClipboard() {
   text.select();
   text.setSelectionRange(0, 99999);
   document.execCommand("copy");
+}
+
+// Function to update active activity and remaining time
+function updateActiveActivity() {
+  const currentTime = new Date();
+  const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+  const activities = document.querySelectorAll(".activity__entity");
+  var activeExist = false;
+
+  // Loop through activities to find the active one
+  for (let i = 0; i < activities.length; i++) {
+    // get current activity start and duration
+    var activityStart = convertToMinuteFormat(
+      activities[i].querySelector(".activity__time").textContent.split(" - ")[0]
+    );
+    var activityEnd =
+      activityStart +
+      parseInt(activities[i].querySelector(".activity__duration").textContent);
+
+    if (currentMinutes >= activityStart && currentMinutes < activityEnd) {
+      // The current activity is active
+      const remainingTime = activityEnd - currentMinutes;
+      const remainingHour = Math.floor(remainingTime / 60);
+      const remainingMinute = remainingTime % 60;
+      const activeActivity =
+        activities[i].querySelector(".activity__name").innerText;
+
+      // Update the display with active activity and remaining time
+      document.getElementById("activeActivity").innerText = activeActivity;
+      var remainingText = "";
+      // if hour exist
+      if (remainingHour > 0) {
+        remainingText = remainingText + remainingHour + " hour";
+        if (remainingHour > 1) {
+          remainingText = remainingText + "s";
+        }
+
+        // if minute exist
+        if (remainingMinute % 60 > 0) {
+          remainingText = remainingText + " " + remainingMinute + " minute";
+          if (remainingMinute > 1) {
+            remainingText = remainingText + "s";
+          }
+        }
+      } else {
+        // if minute exist
+        if (remainingMinute % 60 > 1) {
+          remainingText = remainingText + " " + remainingMinute + " minute";
+          if (remainingMinute > 1) {
+            remainingText = remainingText + "s";
+          }
+        }
+        else {
+          // if it's less than a minute
+          const remainingSecond = currentTime.getSeconds();
+          remainingText =
+            remainingText + " " + (60 - remainingSecond) + " second";
+          if (remainingSecond > 1) {
+            remainingText = remainingText + "s";
+          }
+        }
+      }
+      var remainingText = remainingText + " remaining";
+      document.querySelector('#remainingTime').innerHTML = remainingText;
+
+      activeExist = true;
+      break; // Exit the loop once the active activity is found
+    }
+
+    if (!activeExist) {
+      document.getElementById("activeActivity").innerText = "No Activity in this time yet...";
+      document.querySelector('#remainingTime').innerHTML = "";
+    }
+  }
 }
