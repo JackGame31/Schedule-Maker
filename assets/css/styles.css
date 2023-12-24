@@ -45,8 +45,12 @@
     animation: fade-in 0.4s ease-in-out, slide-in 0.4s ease-in-out;
 }
 
-#container {
+.active__activity {
     animation: fade-in 0.6s ease-in-out, slide-in 0.6s ease-in-out;
+}
+
+#container {
+    animation: fade-in 0.8s ease-in-out, slide-in 0.8s ease-in-out;
 }
 
 #drop-items {

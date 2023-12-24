@@ -288,6 +288,9 @@ function updateActiveActivity() {
       parseInt(activities[i].querySelector(".activity__duration").textContent);
 
     if (currentMinutes >= activityStart && currentMinutes < activityEnd) {
+      // set attribute active
+      activities[i].querySelector('activity__card').setAttribute("active", "");
+
       // The current activity is active
       const remainingTime = activityEnd - currentMinutes;
       const remainingHour = Math.floor(remainingTime / 60);
@@ -332,14 +335,18 @@ function updateActiveActivity() {
       }
       var remainingText = remainingText + " remaining";
       document.querySelector('#remainingTime').innerHTML = remainingText;
-
+      
       activeExist = true;
       break; // Exit the loop once the active activity is found
     }
-
-    if (!activeExist) {
-      document.getElementById("activeActivity").innerText = "No Activity in this time yet...";
-      document.querySelector('#remainingTime').innerHTML = "";
+    else
+    {
+      activities[i].querySelector('activity__card').setAttribute("active", "");
     }
+
+  }
+  if (!activeExist) {
+    document.getElementById("activeActivity").innerText = "Current Active : ";
+    document.querySelector('#remainingTime').innerHTML = "No Activity in this time yet...";
   }
 }
