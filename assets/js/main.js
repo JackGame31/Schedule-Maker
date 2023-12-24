@@ -289,7 +289,8 @@ function updateActiveActivity() {
 
     if (currentMinutes >= activityStart && currentMinutes < activityEnd) {
       // set attribute active
-      activities[i].querySelector('activity__card').setAttribute("active", "");
+      activities[i].querySelector('.activity__card').classList.add("active");
+      document.getElementsByClassName("active__container")[0].classList.add("active");
 
       // The current activity is active
       const remainingTime = activityEnd - currentMinutes;
@@ -337,15 +338,15 @@ function updateActiveActivity() {
       document.querySelector('#remainingTime').innerHTML = remainingText;
       
       activeExist = true;
-      break; // Exit the loop once the active activity is found
     }
     else
     {
-      activities[i].querySelector('activity__card').setAttribute("active", "");
+      activities[i].querySelector('.activity__card').classList.remove("active");
     }
 
   }
   if (!activeExist) {
+    document.getElementsByClassName("active__container")[0].classList.remove("active");
     document.getElementById("activeActivity").innerText = "Current Active : ";
     document.querySelector('#remainingTime').innerHTML = "No Activity in this time yet...";
   }
