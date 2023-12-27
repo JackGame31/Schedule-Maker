@@ -12,7 +12,7 @@ window.onload = function () {
   if (summaryModal) {
     summaryModal.addEventListener("show.bs.modal", (event) => {
       // Update the modal's content
-      const text = summaryModal.getElementById("summary_text");
+      const text = summaryModal.querySelector("#summary_text");
       text.value = "";
 
       // get current date
