@@ -37,7 +37,8 @@
 
             <!-- items that can be sortable -->
             <div class="my-3" id="drop-items">
-                <div class="activity__entity row g-0 my-2">
+                <div class="activity__entity row g-0 my-2" data-start="300" data-duration="60" data-name="Task 1"
+                    data-index="0">
                     <div class="activity__time col-3 p-2">
                         05:00 - 06:00
                     </div>
@@ -51,21 +52,25 @@
 
                             <div class="col-4 d-flex align-items-center justify-content-end">
                                 <button class="btn btn-warning mx-1 rounded-5 edit" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse-0" onclick="openEdit(0)"><i class='bx bx-pencil'></i></button>
-                                <button class="btn btn-danger mx-1 rounded-5 delete"><i class='bx bx-trash'></i></button>
+                                    data-bs-target="#collapse-0" onclick="openEdit(0)"><i
+                                        class='bx bx-pencil'></i></button>
+                                <button class="btn btn-danger mx-1 rounded-5 delete"><i
+                                        class='bx bx-trash'></i></button>
                             </div>
                         </div>
                         <div class="collapse border-top" id="collapse-0">
                             <!-- name -->
                             <div class="px-3 pt-2">
                                 <label class="col-form-label pt-0">Activity Name</label>
-                                <input type="text" class="form-control edit-name rounded-5" value="Task 1" onchange="editEvent(0)">
+                                <input type="text" class="form-control edit-name rounded-5" value="Task 1"
+                                    onchange="editEvent(0)">
                             </div>
 
                             <!-- duration -->
                             <div class="px-3 pb-3">
                                 <label class="col-form-label">Duration (minutes)</label>
-                                <input type="number" class="form-control edit-duration rounded-5" value="60" min="0" onchange="editEvent(0)"/>
+                                <input type="number" class="form-control edit-duration rounded-5" value="60" min="0"
+                                    onchange="editEvent(0)" />
                             </div>
                         </div>
                     </div>

@@ -12,7 +12,7 @@ window.onload = function () {
   if (summaryModal) {
     summaryModal.addEventListener("show.bs.modal", (event) => {
       // Update the modal's content
-      const text = summaryModal.querySelector("#summary_text");
+      const text = summaryModal.getElementById("summary_text");
       text.value = "";
 
       // get current date
@@ -28,7 +28,7 @@ window.onload = function () {
       // get all items, start and end time
       const items = document.querySelectorAll(".activity__entity");
       items.forEach((item) => {
-        const name = item.querySelector(".activity__name").textContent;
+        const name = item.dataset.name;
         const time = item.querySelector(".activity__time").textContent;
         text.value += `\n${time} ${name}`;
       });
@@ -55,9 +55,12 @@ window.onload = function () {
     if (!collapse.is(e.target) && collapse.has(e.target).length === 0) {
       // dismiss all collapse
       if (collapse.length > 0) {
+        // hide collapse and delete all selected class
         collapse.collapse("hide");
-        // delete all selected class
         var selected = document.querySelectorAll(".selected");
+        selected.forEach((item) => {
+          item.classList.remove("selected");
+        });
       }
     }
   });
@@ -87,10 +90,14 @@ new Sortable.create(dropItems, {
 
 // OTHERS
 function addEvent() {
+  // get list of items
   var list = document.getElementById("drop-items");
+
+  // create entity
   var item = document.createElement("div");
   item.className = "activity__entity row g-0 my-2";
-  item.setAttribute("add", "");
+  item.setAttribute("data-duration", "60");
+  item.setAttribute("data-name", "New Task");
   item.innerHTML = `
     <div class="activity__time col-3 p-2">
       05:00 - 06:00
@@ -125,30 +132,36 @@ function addEvent() {
       </div>
     </div>
   `;
+
+  // append and update data
   list.appendChild(item);
   update();
 
+  // give add animation
+  item.setAttribute("add", "");
   setTimeout(() => {
     item.removeAttribute("add");
   }, 500);
 
-  // get latest event and click show bs modal
+  // immediately open edit mode
   const editBtn = item.querySelector(".edit");
   editBtn.click();
 }
 
 // update id and time
 function update() {
-  var items = document.querySelectorAll(".activity__entity");
+  // get current time
   var current = document.getElementById("start_duration").value;
-  current = convertToMinuteFormat(current);
+  current = parseInt(convertToMinuteFormat(current));
+
+  // get all entitiy and check all
+  var items = document.querySelectorAll(".activity__entity");
   var index = 0;
   items.forEach((item) => {
-    // set the attribute
+    // update the time
     item.setAttribute("data-index", index);
-    var ended =
-      parseInt(current) +
-      parseInt(item.getElementsByClassName("activity__duration")[0].innerHTML);
+    item.setAttribute("data-start", current);
+    var ended = current + parseInt(item.dataset.duration);
     item.querySelector(".activity__time").textContent =
       convertToTimeFormat(current) + " - " + convertToTimeFormat(ended);
     current = ended;
@@ -170,21 +183,29 @@ function update() {
     name.setAttribute("onchange", "editEvent(" + index + ")");
     duration.setAttribute("onchange", "editEvent(" + index + ")");
 
-    // update
+    // remove placeholder if exist
     if (document.getElementsByClassName("activity__empty").length > 0) {
       document.getElementsByClassName("activity__empty")[0].remove();
     }
+
+    // update to the next index
     index++;
   });
 }
 
 // delete an activity
 function deleteActivity(id) {
+  // get the item
   var item = document.querySelector(`[data-index="${id}"]`);
+
+  // create animation
   item.setAttribute("delete", "");
   setTimeout(() => {
+    // remove when animation finished
     item.remove();
     update();
+
+    // if there is no item, then create placeholder
     if (document.getElementById("drop-items").childElementCount == 0) {
       document.getElementById("drop-items").innerHTML =
         '<div class="activity__empty text-center text-secondary px-3 py-2 border border-secondary rounded-4" style="border-style: dashed !important;">No schedule created</div>';
@@ -192,39 +213,50 @@ function deleteActivity(id) {
   }, 200);
 }
 
-// add attribute class edit mode
-// when there is class edit mode, then css selected not show
+// function to open edit mode of selected activity
 function openEdit(id) {
-  // remove all selected class
+  // remove all selected class for sortable list
   var selected = document.querySelectorAll(".selected");
   selected.forEach((item) => {
     item.classList.remove("selected");
   });
 
   // auto focus show input
-  var input = document.querySelector("#collapse-" + id + " .edit-name");
-  var len = input.value.length;
-  input.focus();
-  input.select();
+  var inputName = document.querySelector("#collapse-" + id + " .edit-name");
+  inputName.focus();
+  inputName.select();
+
+  // add event listener enter button clicked
+  inputName.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      // change to next input
+      inputDuration = $(inputName).closest(".collapse").find("input")[1];
+      inputDuration.select();
+
+      // when the last input is finished by clicking enter
+      inputDuration.addEventListener("keypress", function (e) {
+        // close all show collapse
+        var collapse = $(".show").collapse("hide");
+      });
+    }
+  });
 }
 
 // edit an activity
 function editEvent(id) {
   // get the value
-  const card = document
-    .querySelector(`[data-index="${id}"]`)
-    .querySelector(".activity__card");
-  const name = card.querySelector(".edit-name").value;
-  var duration = card.querySelector(".edit-duration").value;
+  var entity = document.querySelector(`[data-index="${id}"]`);
+  var name = entity.querySelector(".edit-name").value;
+  var duration = entity.getElementsByClassName("edit-duration")[0].value;
   if (duration < 0) {
-    card.querySelector(".edit-duration").value = 0;
     duration = 0;
   }
 
   // update the value
-  const item = document.querySelector(`[data-index="${id}"]`);
-  item.querySelector(".activity__name").textContent = name;
-  item.querySelector(".activity__duration").textContent = duration + " minutes";
+  entity.setAttribute("data-name", name);
+  entity.querySelector(".activity__name").textContent = name;
+  entity.setAttribute("data-duration", duration);
+  entity.querySelector(".activity__duration").textContent = duration + " minutes";
 
   update();
 }
@@ -270,39 +302,39 @@ function copyClipboard() {
   document.execCommand("copy");
 }
 
-// Function to update active activity and remaining time
+// function for check current active activity every second
 function updateActiveActivity() {
+  // get current time
   const currentTime = new Date();
   const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+
+  // get all activities
   const activities = document.querySelectorAll(".activity__entity");
   var activeExist = false;
 
-  // Loop through activities to find the active one
-  for (let i = 0; i < activities.length; i++) {
-    // get current activity start and duration
-    var activityStart = convertToMinuteFormat(
-      activities[i].querySelector(".activity__time").textContent.split(" - ")[0]
-    );
-    var activityEnd =
-      activityStart +
-      parseInt(activities[i].querySelector(".activity__duration").textContent);
+  // check all activities to find the active one
+  activities.forEach((item) => {
+    // get current activity start and end
+    var activityStart = parseInt(item.dataset.start);
+    var activityEnd = activityStart + parseInt(item.dataset.duration);
 
     if (currentMinutes >= activityStart && currentMinutes < activityEnd) {
       // set attribute active
-      activities[i].querySelector('.activity__card').classList.add("active");
-      document.getElementsByClassName("active__container")[0].classList.add("active");
+      item.querySelector(".activity__card").classList.add("active");
+      document.querySelector(".active__container").classList.add("active");
 
       // The current activity is active
       const remainingTime = activityEnd - currentMinutes;
       const remainingHour = Math.floor(remainingTime / 60);
       const remainingMinute = remainingTime % 60;
-      const activeActivity =
-        activities[i].querySelector(".activity__name").innerText;
+      const activeActivity = item.dataset.name;
 
       // Update the display with active activity and remaining time
       document.getElementById("activeActivity").innerText = activeActivity;
       var remainingText = "";
-      // if hour exist
+
+      // format remaining text time
+      // if hour and minute exist
       if (remainingHour > 0) {
         remainingText = remainingText + remainingHour + " hour";
         if (remainingHour > 1) {
@@ -317,14 +349,13 @@ function updateActiveActivity() {
           }
         }
       } else {
-        // if minute exist
+        // if hour not exist and minute exist
         if (remainingMinute % 60 > 1) {
           remainingText = remainingText + " " + remainingMinute + " minute";
           if (remainingMinute > 1) {
             remainingText = remainingText + "s";
           }
-        }
-        else {
+        } else {
           // if it's less than a minute
           const remainingSecond = currentTime.getSeconds();
           remainingText =
@@ -334,20 +365,24 @@ function updateActiveActivity() {
           }
         }
       }
-      var remainingText = remainingText + " remaining";
-      document.querySelector('#remainingTime').innerHTML = remainingText;
-      
-      activeExist = true;
-    }
-    else
-    {
-      activities[i].querySelector('.activity__card').classList.remove("active");
-    }
 
-  }
+      // set the remaining text
+      var remainingText = remainingText + " remaining";
+      document.querySelector("#remainingTime").innerHTML = remainingText;
+
+      // flag active exist
+      activeExist = true;
+    } else {
+      item.querySelector(".activity__card").classList.remove("active");
+    }
+  });
+
+  // if not active exist
   if (!activeExist) {
-    document.getElementsByClassName("active__container")[0].classList.remove("active");
+    // reset remaining text
+    document.querySelector(".active__container").classList.remove("active");
     document.getElementById("activeActivity").innerText = "Current Active : ";
-    document.querySelector('#remainingTime').innerHTML = "No Activity in this time yet...";
+    document.getElementById("remainingTime").innerHTML =
+      "No activity in this time yet...";
   }
 }
