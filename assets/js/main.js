@@ -231,6 +231,7 @@ function openEdit(id) {
     if (e.key === "Enter") {
       // change to next input
       inputDuration = $(inputName).closest(".collapse").find("input")[1];
+      inputDuration.focus();
       inputDuration.select();
 
       // when the last input is finished by clicking enter
